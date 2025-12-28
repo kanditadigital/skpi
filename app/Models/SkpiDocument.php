@@ -21,6 +21,6 @@ class SkpiDocument extends Model
 
     public function request(): BelongsTo
     {
-        return $this->belongsTo(SkpiRequest::class);
+        return $this->belongsTo(SkpiRequest::class, 'skpi_request_id');
     }
 }
