@@ -278,7 +278,7 @@
                                                     </td>
                                                     <td>
                                                         @if($activity->bukti_file)
-                                                            <x-button size="sm" variant="secondary" type="button" onclick="previewDocument(@json(\Illuminate\Support\Facades\Storage::disk('s3')->url($activity->bukti_file)), @json($activity->nama_aktivitas))">
+                                                            <x-button size="sm" variant="secondary" type="button" onclick='previewDocument(@json(\Illuminate\Support\Facades\Storage::disk('s3')->url($activity->bukti_file)), @json($activity->nama_aktivitas))'>
                                                                 <i class="fas fa-eye"></i> Preview
                                                             </x-button>
                                                         @else

@@ -180,7 +180,7 @@
                                                     </td>
                                                     <td>
                                                         @if($activity->document_url)
-                                                            <x-button size="sm" variant="secondary" type="button" onclick="previewDocument(@json($activity->document_url), @json($activity->nama_aktivitas))">
+                                                            <x-button size="sm" variant="secondary" type="button" onclick='previewDocument(@json($activity->document_url), @json($activity->nama_aktivitas))'>
                                                                 <i class="fas fa-eye"></i> Preview
                                                             </x-button>
                                                         @else
