@@ -75,7 +75,7 @@
             @enderror
         </div>
     </div>
-    <x-button type="submit" variant="primary" @disabled(!$konfirmasiChecked)>
+    <x-button type="submit" variant="primary">
         {{ $buttonText }}
     </x-button>
 </form>

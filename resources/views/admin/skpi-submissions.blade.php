@@ -43,7 +43,7 @@
                                             </td>
                                             <td>{{ $submission->submitter->name }}</td>
                                             <td>
-                                                <x-button size="sm" variant="secondary" type="button" data-toggle="modal" data-target="#modalDetail{{ $submission->id }}">
+                                                <x-button size="sm" variant="primary" type="button" data-toggle="modal" data-target="#modalDetail{{ $submission->id }}">
                                                     Detail
                                                 </x-button>
                                             </td>
@@ -65,7 +65,13 @@
         </div>
     </div>
 
-    @foreach($skpiSubmissions as $submission)
+
+</div>
+
+
+@endsection
+
+@foreach($skpiSubmissions as $submission)
         @php
             $profile = $submission->alumniProfile;
             $validatedActivities = $profile->user?->alumniActivities ?? collect();
@@ -275,9 +281,8 @@
             </div>
         </div>
     @endforeach
-</div>
 
-<script>
+    <script>
 function previewDocument(url, title) {
     var modalHtml = `
         <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
@@ -320,4 +325,3 @@ function showRejectForm(submissionId) {
     }
 }
 </script>
-@endsection

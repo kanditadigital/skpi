@@ -7,6 +7,7 @@
                 <div class="section-body">
                     @if(auth()->user()->hasRole('alumni'))
                         <!-- SKPI Status Card for Alumni -->
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="card shadow">
@@ -14,20 +15,29 @@
                                         <h4><i class="fas fa-graduation-cap"></i> Status SKPI</h4>
                                     </div>
                                     <div class="card-body">
-                                        @if($skpiSubmitted)
-                                            @if($skpiStatus === 'approved')
-                                                <div class="alert alert-success">
-                                                    <i class="fas fa-check-circle fa-2x mb-2"></i>
-                                                    <h5>SKPI Disetujui!</h5>
-                                                    <p class="mb-1">SKPI Anda telah disetujui pada {{ $latestSubmission->approved_at->format('d/m/Y H:i') }}</p>
-                                                    @if($latestSubmission->approver)
-                                                        <small>Oleh: {{ $latestSubmission->approver->name }}</small>
-                                                    @endif
-                                                </div>
-                                            @elseif($skpiStatus === 'rejected')
-                                                <div class="alert alert-danger">
-                                                    <i class="fas fa-times-circle fa-2x mb-2"></i>
-                                                    <h5>SKPI Ditolak</h5>
+                    @if($skpiSubmitted)
+                        @if($skpiStatus === 'approved')
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                <h5>SKPI Disetujui!</h5>
+                                <p class="mb-1">SKPI Anda telah disetujui pada {{ $latestSubmission->approved_at->format('d/m/Y H:i') }}</p>
+                                @if($latestSubmission->approver)
+                                    <small>Oleh: {{ $latestSubmission->approver->name }}</small>
+                                @endif
+                            </div>
+                            @if($skpiDocument && optional($latestSkpiRequest)->status === 'approved')
+                                <div class="text-center mt-3">
+                                    <x-button variant="danger" class="btn-lg px-4 shadow" href="{{ route('alumni.skpi.download') }}"
+                                        target="_blank" rel="noreferrer noopener">
+                                        <i class="fas fa-file-pdf"></i> Download SKPI Resmi
+                                    </x-button>
+                                    <p class="small text-muted mt-2 mb-0">Dokumen PDF resmi ditandatangani pimpinan.</p>
+                                </div>
+                            @endif
+                        @elseif($skpiStatus === 'rejected')
+                            <div class="alert alert-danger">
+                                <i class="fas fa-times-circle fa-2x mb-2"></i>
+                                <h5>SKPI Ditolak</h5>
                                                     <p class="mb-1">SKPI Anda ditolak pada {{ $latestSubmission->approved_at->format('d/m/Y H:i') }}</p>
                                                     @if($latestSubmission->notes)
                                                         <p class="mb-0"><strong>Alasan:</strong> {{ $latestSubmission->notes }}</p>

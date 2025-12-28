@@ -27,20 +27,6 @@
                             @endif
                             <br>Silakan cetak SKPI Anda.
                         </div>
-                        @if($skpiDocument)
-                            <div class="d-flex align-items-center flex-wrap mt-2">
-                            <x-button variant="secondary" class="mr-3 mb-2" href="{{ route('alumni.skpi.preview') }}" target="_blank" rel="noreferrer noopener">
-                                <i class="fas fa-eye"></i> Preview SKPI
-                            </x-button>
-                            <x-button variant="primary" class="mb-2" href="{{ route('alumni.skpi.download') }}" target="_blank">
-                                <i class="fas fa-download"></i> Download SKPI
-                            </x-button>
-                                <div class="small text-muted mb-0">
-                                    Nomor SKPI: <strong>{{ $skpiDocument->nomor_skpi }}</strong><br>
-                                    Diterbitkan: {{ $skpiDocument->issued_at->format('d/m/Y H:i') }}
-                                </div>
-                            </div>
-                        @endif
                     @elseif($skpiStatus === 'rejected')
                         <div class="alert alert-danger">
                             <i class="fas fa-times-circle"></i> <strong>SKPI Ditolak</strong><br>

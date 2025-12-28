@@ -68,7 +68,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <x-button size="sm" variant="secondary" type="button" data-toggle="modal" data-target="#modalDetail{{ $alumni->id }}">
+                                                <x-button size="sm" variant="primary" type="button" data-toggle="modal" data-target="#modalDetail{{ $alumni->id }}">
                                                     Preview
                                                 </x-button>
                                             </td>
@@ -93,46 +93,11 @@
 
 </div>
 
-<script>
-function previewDocument(url, title) {
-    // Create modal for document preview
-    var modalHtml = `
-        <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="documentModalLabel">Preview Dokumen: ${title}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <iframe src="${url}" width="100%" height="500px" style="border: none;"></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="${url}" target="_blank" class="btn btn-primary">Buka di Tab Baru</a>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
 
-    // Remove existing modal if any
-    $('#documentModal').remove();
-
-    // Add modal to body
-    $('body').append(modalHtml);
-
-    // Show modal
-    $('#documentModal').modal('show');
-}
-</script>
 @endsection
 
-
 <!-- Modals for alumni details -->
-    @foreach($alumniProfiles as $alumni)
+@foreach($alumniProfiles as $alumni)
     <div class="modal fade" id="modalDetail{{ $alumni->id }}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel{{ $alumni->id }}" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
@@ -244,7 +209,7 @@ function previewDocument(url, title) {
                                             <span class="badge badge-success p-2"><i class="fas fa-check-circle"></i> Data Sudah Divalidasi</span>
                                             <form action="{{ route('admin.validation.reject', $alumni->id) }}" method="POST" style="display: inline;">
                                                 @csrf
-                                                <x-button size="sm" variant="secondary" type="submit" class="ml-2" onclick="return confirm('Apakah Anda yakin ingin membatalkan validasi ini?')">
+                                                <x-button size="sm" variant="danger" type="submit" class="ml-2" onclick="return confirm('Apakah Anda yakin ingin membatalkan validasi ini?')">
                                                     Batalkan Validasi
                                                 </x-button>
                                             </form>
@@ -319,7 +284,16 @@ function previewDocument(url, title) {
                                                     </td>
                                                     <td>
                                                         @if($activity->bukti_file)
-                                                            <x-button size="sm" variant="secondary" type="button" onclick='previewDocument(@json(\Illuminate\Support\Facades\Storage::disk("s3")->url($activity->bukti_file)), @json($activity->nama_aktivitas))'>
+                                                            @php
+                                                                $previewUrl = \Illuminate\Support\Facades\Storage::disk('s3')->temporaryUrl(
+                                                                    $activity->bukti_file,
+                                                                    now()->addMinutes(15)
+                                                                );
+                                                            @endphp
+                                                            <x-button size="sm" variant="primary" type="button"
+                                                                class="js-preview-document"
+                                                                data-preview-url="{{ $previewUrl }}"
+                                                                data-preview-title="{{ $activity->nama_aktivitas }}">
                                                                 <i class="fas fa-eye"></i> Preview
                                                             </x-button>
                                                         @else
@@ -453,12 +427,59 @@ function previewDocument(url, title) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <x-button type="button" variant="secondary" data-dismiss="modal">
+                    <x-button type="button" variant="danger" data-dismiss="modal">
                         Tutup
                     </x-button>
                 </div>
             </div>
         </div>
-
     </div>
-    @endforeach
+@endforeach
+
+<script>
+function previewDocument(url, title) {
+    // Create modal for document preview
+    var modalHtml = `
+        <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="documentModalLabel">Preview Dokumen: ${title}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <iframe src="${url}" width="100%" height="500px" style="border: none;"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="${url}" target="_blank" class="btn btn-primary">Buka di Tab Baru</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Remove existing modal if any
+    $('#documentModal').remove();
+
+    // Add modal to body
+    $('body').append(modalHtml);
+
+    // Show modal
+    $('#documentModal').modal('show');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.js-preview-document').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const url = this.dataset.previewUrl;
+            const title = this.dataset.previewTitle || 'Dokumen';
+            if (url) {
+                previewDocument(url, title);
+            }
+        });
+    });
+});
+</script>
