@@ -90,7 +90,48 @@
         </div>
     </div>
 
-    <!-- Modals for alumni details -->
+
+</div>
+
+<script>
+function previewDocument(url, title) {
+    // Create modal for document preview
+    var modalHtml = `
+        <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="documentModalLabel">Preview Dokumen: ${title}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <iframe src="${url}" width="100%" height="500px" style="border: none;"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="${url}" target="_blank" class="btn btn-primary">Buka di Tab Baru</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Remove existing modal if any
+    $('#documentModal').remove();
+
+    // Add modal to body
+    $('body').append(modalHtml);
+
+    // Show modal
+    $('#documentModal').modal('show');
+}
+</script>
+@endsection
+
+
+<!-- Modals for alumni details -->
     @foreach($alumniProfiles as $alumni)
     <div class="modal fade" id="modalDetail{{ $alumni->id }}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel{{ $alumni->id }}" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -421,41 +462,3 @@
 
     </div>
     @endforeach
-</div>
-
-<script>
-function previewDocument(url, title) {
-    // Create modal for document preview
-    var modalHtml = `
-        <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="documentModalLabel">Preview Dokumen: ${title}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <iframe src="${url}" width="100%" height="500px" style="border: none;"></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="${url}" target="_blank" class="btn btn-primary">Buka di Tab Baru</a>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Remove existing modal if any
-    $('#documentModal').remove();
-
-    // Add modal to body
-    $('body').append(modalHtml);
-
-    // Show modal
-    $('#documentModal').modal('show');
-}
-</script>
-@endsection
